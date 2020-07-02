@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context.xsd
+   http://www.springframework.org/schema/aop
+   http://www.springframework.org/schema/aop/spring-aop.xsd
+   http://www.springframework.org/schema/tx
+   http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 开启注解扫描 -->
+   <!-- <context:component-scan base-package="com.itheima.ssm">
+        &lt;!&ndash; 忽略某些注解，把Controller给忽略了 &ndash;&gt;
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>-->
+
+    <!--配置c3p0连接池-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql:///springframework?characterEncoding=utf-8"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="root"></property>
+    </bean>
+    <!--配置SqlSessionFactoryBean工厂-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+        <property name="dataSource" ref="dataSource"></property>
+
+        <property name="typeAliasesPackage" value="com.itheima.ssm.domain"></property>
+
+    </bean>
+    <!--配置扫描的dao包,让dao层的接口被spring管理-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+
+        <property name="basePackage" value="com.itheima.ssm.dao"></property>
+    </bean>
+
+    <!--1.配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--使用注解方式,配置spring的声明式事务处理-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+    <!--&lt;!&ndash;2.配置事务通知&ndash;&gt;
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" read-only="true"/>
+            <tx:method name="save*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="edit*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="delete*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
+    &lt;!&ndash;配置aop增强事务&ndash;&gt;
+    <aop:config>
+        <aop:advisor advice-ref="txadvice" pointcut="execution(* com.itheima.ssm.service..*.*(..))"></aop:advisor>
+    </aop:config>-->
+
+
+</beans>

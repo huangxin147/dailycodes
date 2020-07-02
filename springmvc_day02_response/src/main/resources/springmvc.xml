@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--1.配置spring创建容器时要扫描的包,可以使用@controller注解-->
+    <context:component-scan base-package="com.itheima"></context:component-scan>
+
+    <!--2.配置视图解析器,用于转发和重定向,默认是转发,项目阶段不会配置,因为我们执行的都是ajax调用,该项配置了解一下-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--3.配置spring开启注解mvc的支持,自动开启处理器映射器和处理器适配-->
+    <mvc:annotation-driven ></mvc:annotation-driven>
+    <!--根据路径和文件属性手动取消拦截-->
+    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
+    <!--开启springMVC默认的取消拦截-->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+
+
+
+</beans>
